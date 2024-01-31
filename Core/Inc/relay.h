@@ -16,8 +16,13 @@
 typedef struct
 {
 	uint8_t n_ports;
-	uint8_t *ports_state;
 	gpio_t *ports_gpio;
+}relay_config_t;
+
+typedef struct
+{
+	relay_config_t *config;
+	uint8_t *ports_state;
 }relay_t;
 
 typedef enum
@@ -27,7 +32,7 @@ typedef enum
 	RELAY_STATUS_ERR 	= 2,
 }reley_err_t;
 
-void relay_init(relay_t **self, uint8_t n_ports, gpio_t *gpio);
+void relay_init(relay_t **self, const relay_config_t *relay_config);
 
 void relay_deinit(relay_t *self);
 

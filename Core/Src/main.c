@@ -30,6 +30,7 @@
 #include "relay.h"
 #include "flash.h"
 
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -372,6 +373,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		encoder_set_sw_flag();
 	}
 }
+
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_start_runtime */
@@ -384,27 +386,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 void start_runtime(void *argument)
 {
   /* USER CODE BEGIN 5 */
-  /* Infinite loop */
-  tm1638_init();
-  osDelay(1);
-  tm1638_set_display(1, 3);
-  tm1638_set_clear_all();
 
   runtime_controller_t *runtime_controller;
   runtime_controller_init(&runtime_controller);
 
-  gpio_t relay_gpio[] = {{RELAY_IN0_GPIO_Port, RELAY_IN0_Pin},
-		  	  	  	  	 {RELAY_IN1_GPIO_Port, RELAY_IN1_Pin}};
-  relay_t *relay;
-  relay_init(&relay, 2, relay_gpio);
-
-  relay_set_status(relay, 0, 1);
-  osDelay(1000);
-  relay_set_status(relay, 0, 0);
-
   for(;;)
   {
-
     runtime_controller_run(runtime_controller);
   }
   /* USER CODE END 5 */

@@ -2,7 +2,7 @@
  * ds18b20.c
  *
  *  Created on: Jan 10, 2024
- *      Author: muntek
+ *      Author: Antoni Bezdzietny
  */
 
 
@@ -119,6 +119,21 @@ float ds18b20_get_temp_float(const uint8_t* rom_code)
   int16_t temp_raw = (scratchpad[1] << 8) | scratchpad[0];
 
   return temp_raw / 16.f;
+}
+
+void ds18b20_get_temp(ds18b20_device_t *device)
+{
+	uint8_t scratchpad[DS18B20_SCRATCHPAD_SIZE];
+
+	if (ds18b20_read_scratchpad(device->rom_code, scratchpad) != DS18B20_OK)
+	{
+		device->status = DS18B20_ERROR;
+		device->temperature = -85.f;
+		return;
+	}
+
+	device->status = DS18B20_OK;
+	device->temperature = ((scratchpad[1] << 8) | scratchpad[0]) / 16.f;
 }
 
 

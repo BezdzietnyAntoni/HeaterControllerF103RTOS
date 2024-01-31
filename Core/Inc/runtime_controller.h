@@ -8,8 +8,12 @@
 #ifndef INC_RUNTIME_CONTROLLER_H_
 #define INC_RUNTIME_CONTROLLER_H_
 
-#include "configuration.h"
+#include <menu_config.h>
 #include "flash.h"
+
+#include "ds18b20.h"
+#include "relay.h"
+
 
 typedef enum
 {
@@ -21,20 +25,23 @@ typedef enum
 typedef struct
 {
 	/* Configuration fields */
-	runtime_controller_mode_t  mode;
+	runtime_controller_mode_t mode;
 	uint32_t operation_time;
+
+	/* Devices */
+	relay_t *relay;
+	flash_t *flash;
+	ds18b20_device_t *ds18b_20_boiler;
+	ds18b20_device_t *ds18b_20_pipe;
 
 	/* Private fields*/
 	uint32_t _last_action_tick;
 	uint8_t _menu_option;
-	configuration_t _configuration;
+	menu_config_t _configuration;
 	float _input_value;
-	float _temp_boiler;
-	float _temp_pipe;
 	uint8_t _is_boiler_heating;
 	uint8_t _is_extra_heating;
 	uint8_t is_new_config;
-	flash_t *_flash;
 }runtime_controller_t;
 
 void runtime_controller_init(runtime_controller_t **self);

@@ -76,7 +76,7 @@ void Error_Handler(void);
 #define ENC_SW_EXTI_IRQn EXTI0_IRQn
 #define RELAY_IN0_Pin GPIO_PIN_1
 #define RELAY_IN0_GPIO_Port GPIOB
-#define RELAY_IN1_Pin GPIO_PIN_2
+#define RELAY_IN1_Pin GPIO_PIN_10
 #define RELAY_IN1_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */

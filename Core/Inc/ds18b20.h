@@ -2,7 +2,7 @@
  * ds18b20.h
  *
  *  Created on: Jan 10, 2024
- *      Author: muntek
+ *      Author: Antoni Bezdzietny
  */
 
 #ifndef INC_DS18B20_H_
@@ -46,6 +46,8 @@ ds18b20_status_t ds18b20_set_resolution(const uint8_t* rom_code, ds18b20_resolut
 int16_t ds18b20_get_temp_int(const uint8_t* rom_code);
 
 float ds18b20_get_temp_float(const uint8_t* rom_code);
+
+void ds18b20_get_temp(ds18b20_device_t *device);
 
 
 

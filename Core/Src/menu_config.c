@@ -1,4 +1,4 @@
-#include "configuration.h"
+#include <menu_config.h>
 
 /* Shortcuts display in menu mode */
 static const char * CONFIG_MENU_CHAR [MENU_N_OPTION] =
@@ -27,20 +27,20 @@ static const uint8_t CONFIG_RANGE [MENU_N_OPTION][2] =
 };
 
 /* Default setting using when some issue with as flash memory */
-static const configuration_t CONFIG_DEFAULT = {5, 5, 30, 2, 80, 30, 5, 90};
+static const menu_config_t CONFIG_DEFAULT = {5, 5, 30, 2, 80, 30, 5, 90};
 
 /*
  * Public function definition
  */
-const char* config_get_menu_char(menu_option_t menu_option) { return CONFIG_MENU_CHAR[menu_option]; }
+const char* menu_config_get_menu_char(menu_option_t menu_option) { return CONFIG_MENU_CHAR[menu_option]; }
 
-const configuration_t* config_get_default( void ) { return &CONFIG_DEFAULT; }
+const menu_config_t* menu_config_get_default( void ) { return &CONFIG_DEFAULT; }
 
-uint8_t config_get_default_opt( menu_option_t menu_option ) { return CONFIG_DEFAULT[menu_option]; }
+uint8_t menu_config_get_default_opt( menu_option_t menu_option ) { return CONFIG_DEFAULT[menu_option]; }
 
-uint8_t config_get_min(menu_option_t menu_option) {return CONFIG_RANGE[menu_option][0]; }
+uint8_t menu_config_get_min(menu_option_t menu_option) {return CONFIG_RANGE[menu_option][0]; }
 
-uint8_t config_get_max(menu_option_t menu_option) {return CONFIG_RANGE[menu_option][1]; }
+uint8_t menu_config_get_max(menu_option_t menu_option) {return CONFIG_RANGE[menu_option][1]; }
 
 
 

@@ -1,38 +1,32 @@
 /*
- *  Created on: Jan 12, 2024
+ * configuration.h
+ *
+ *  Created on: Jan 31, 2024
  *      Author: Antoni Bezdzietny
  */
 
 #ifndef INC_CONFIGURATION_H_
 #define INC_CONFIGURATION_H_
 
+/* Includes  */
 #include <stdint.h>
-
-typedef enum
-{
-	MENU_OPTION_BRT = 0,		//  Differential boiler temperature
-	MENU_OPTION_BRH = 1, 		//  Differential boiler temperature hysteresis
-	MENU_OPTION_BTS = 2,		//  Boiler temperature set
-	MENU_OPTION_BTH = 3,		//  Boiler temperature set hysteresis
-	MENU_OPTION_BTU = 4,    	//  Boiler temperature max
-	MENU_OPTION_PTS = 5,    	//  Water heater temperature set
-	MENU_OPTION_PTH = 6,		//  Water heater temperature hysteresis
-	MENU_OPTION_RTU = 7,		//  Hot water max temperature
-	MENU_N_OPTION, 	// Number of menu option
-}menu_option_t;
-
-typedef uint8_t configuration_t [MENU_N_OPTION] ;
+#include "utilities.h"
 
 
-const char* config_get_menu_char(menu_option_t menu_option);
 
-const configuration_t* config_get_default( void );
+/* Relay configuration */
+/*
+ *	Relay pins should be set as output push pull without pull-up and pull-down
+ */
+const uint8_t CONFIG_RELAY_PORTS = 2;
+const gpio_t CONFIG_RELAY_GPIO[2] = {{RELAY_IN0_GPIO_Port, RELAY_IN0_Pin},
+		  	  	  	  				 {RELAY_IN1_GPIO_Port, RELAY_IN1_Pin}};
 
-uint8_t config_get_default_opt( menu_option_t menu_option );
 
-uint8_t config_get_min(menu_option_t menu_option);
+/* Thermometers DS18B20 ROM configuration */
+const uint8_t CONFIG_DS18B20_BOILER_ROM_CODE [8] = { 0x28, 0xB5, 0xCA, 0x95, 0xF0, 0x01, 0x3C, 0x59 };
 
-uint8_t config_get_max(menu_option_t menu_option);
+const uint8_t CONFIG_DS18B20_PIPE_ROM_CODE   [8] = { 0x28, 0xD7, 0x21, 0x95, 0xF0, 0x01, 0x3C, 0x5E };
 
 
 #endif /* INC_CONFIGURATION_H_ */

@@ -29,7 +29,7 @@
 #include "ds18b20.h"
 #include "relay.h"
 #include "flash.h"
-
+#include "one_wire.h"
 
 /* USER CODE END Includes */
 
@@ -76,6 +76,7 @@ void start_runtime(void *argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
 /* USER CODE END 0 */
 
 /**
@@ -94,7 +95,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+  one_wire_init(OW_GPIO_Port, OW_Pin);
   /* USER CODE END Init */
 
   /* Configure the system clock */

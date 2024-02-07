@@ -32,7 +32,7 @@
 static ds18b20_status_t ds18b20_send_cmd(const uint8_t* rom_code, uint8_t cmd)
 {
 
-  if (one_wire_reset() != ONE_WIRE_OK)
+  if (one_wire_write_reset() != ONE_WIRE_OK)
     return DS18B20_ERROR;
 
   if (!rom_code) {
@@ -74,7 +74,7 @@ ds18b20_status_t ds18b20_read_address(uint8_t* rom_code)
 {
   uint8_t crc;
 
-  if (one_wire_reset() != ONE_WIRE_OK)
+  if (one_wire_write_reset() != ONE_WIRE_OK)
     return DS18B20_ERROR;
 
   one_wire_write_byte(DS18B20_READ_ROM);

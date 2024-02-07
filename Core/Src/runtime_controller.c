@@ -236,12 +236,11 @@ static void _runtime_reset_encoder_settings( runtime_controller_t *self )
 static void _runtime_normal_measure_temperature( runtime_controller_t *self )
 {
 	/* Get previous read temperature */
-	ds18b20_get_temp(self->ds18b_20_boiler);
-	ds18b20_get_temp(self->ds18b_20_pipe);
+	ds18b20_device_read_temperature(self->ds18b_20_boiler);
+	ds18b20_device_read_temperature(self->ds18b_20_pipe);
 
 	/* Ask for new measurements */
-	ds18b20_start_measure(self->ds18b_20_boiler->rom_code);
-	ds18b20_start_measure(self->ds18b_20_pipe->rom_code);
+	ds18b20_start_measure_all();
 }
 
 static void _runtime_normal_set_display( runtime_controller_t *self )

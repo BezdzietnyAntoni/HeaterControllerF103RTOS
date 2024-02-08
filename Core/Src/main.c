@@ -388,6 +388,13 @@ void start_runtime(void *argument)
 {
   /* USER CODE BEGIN 5 */
 
+	gpio_t encoder_sw = {
+			.GPIOx = ENC_SW_GPIO_Port,
+			.GPIO_Pin = ENC_SW_Pin,
+	};
+
+	encoder_init(&htim3, &encoder_sw);
+
 
   runtime_controller_t *runtime_controller;
   runtime_controller_init(&runtime_controller);

@@ -1,6 +1,5 @@
 #include "tm1638.h"
 #include "utilities.h"
-#include "main.h"
 #include "ascii_7segment.h"
 #include "string.h"
 

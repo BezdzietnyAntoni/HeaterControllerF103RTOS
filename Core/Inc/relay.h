@@ -1,11 +1,11 @@
 /*
- *	N_ports relay controller
+ * This .h / .c files implements service for n ports relay
  *
  *	GPIO pins used for relay ports
  *	should be set in open drain mode
  *
- *  Created on: 17.01.2024
- *      Author: Antoni Bezdzietny
+ * @author : Antoni Bezdzietny
+ * @create : 17.01.2024
  */
 
 #ifndef INC_RELAY_H_
@@ -32,12 +32,32 @@ typedef enum
 	RELAY_STATUS_ERR 	= 2,
 }reley_err_t;
 
+/*
+ * Function initialize relay by passing configuration
+ * @param **self 		: Pointer to self relay object
+ * @param *relay_config : Pointer to relay configuration
+ */
 void relay_init(relay_t **self, const relay_config_t *relay_config);
 
+/*
+ * Function deinitialize relay object (free allocate memory)
+ * @param *self : Pointer to self relay object
+ */
 void relay_deinit(relay_t *self);
 
+/*
+ * Function change relay port status
+ * @param *self  : Pointer to self relay object
+ * @param port   : n-th port
+ * @param status : set concrete status 0/1
+ */
 reley_err_t relay_set_status(relay_t *self, uint8_t port, uint8_t status);
 
+/*
+ * Function return relay port status
+ * @param *self  : Pointer to self relay object
+ * @param port   : n-th port
+ */
 uint8_t relay_get_status(relay_t *self, uint8_t port);
 
 #endif /* INC_RELAY_H_ */

@@ -1,7 +1,6 @@
 #include "encoder.h"
 #include "time.h"
-#include "main.h"
-#include "utilities.h"
+
 
 /* --- Private variable definition and declaration --- */
 typedef struct

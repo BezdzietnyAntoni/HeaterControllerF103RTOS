@@ -3,10 +3,19 @@
 #include <stm32f1xx.h>
 #include <stdlib.h>
 
+/* --- Private variable --- */
+
 #define FLASH_HALFWORLD_OFFSET 	2
 #define FLASH_PAGE_START 		0x0801FC00
 #define FLASH_PAGE_END			0x0801FFFF
 
+/* --- Private function declaration --- */
+static flash_status_t _flash_erase_page(flash_t *self);
+static void _flash_find_current_address(flash_t *self);
+
+
+
+/* --- Public function definition --- */
 
 void flash_init(flash_t **self)
 {
@@ -14,15 +23,55 @@ void flash_init(flash_t **self)
 	(*self)->_start_address_page = FLASH_PAGE_START;
 	(*self)->_end_address_page   = FLASH_PAGE_END - 1;
 
-	flash_find_current_address((*self));
+	_flash_find_current_address((*self));
 }
+
 
 void flash_deinit(flash_t *self)
 {
 	free(self);
 }
 
-void flash_find_current_address(flash_t *self)
+
+flash_status_t flash_write_data(flash_t *self, uint8_t *data, uint8_t len)
+{
+	if((self->current_address + (len * FLASH_HALFWORLD_OFFSET)) > FLASH_PAGE_END )
+	{
+		flash_status_t status = _flash_erase_page(self);
+		if( status != FLASH_OK)
+			return status;
+	}
+
+
+	HAL_FLASH_Unlock();
+	for(uint8_t i = 0; i < len; ++i)
+	{
+		HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, self->current_address, data[i]);
+		self->current_address += FLASH_HALFWORLD_OFFSET;
+	}
+	HAL_FLASH_Lock();
+
+	return FLASH_OK;
+}
+
+
+flash_status_t flash_read_data(flash_t *self, uint8_t *data, uint8_t len)
+{
+	uint32_t start_read_address = (self->current_address - (len * FLASH_HALFWORLD_OFFSET));
+	if(start_read_address < FLASH_PAGE_START)
+		return FLASH_INVALID_LEN;
+
+	for(uint8_t i = 0; i < len; ++i)
+		data[i] = *(uint8_t*)(start_read_address + (i * 2) );
+
+	return FLASH_OK;
+}
+
+
+
+/* --- Private function definition --- */
+
+void _flash_find_current_address(flash_t *self)
 {
 	self->current_address = self->_start_address_page;
 
@@ -58,40 +107,8 @@ void flash_find_current_address(flash_t *self)
 	self->current_address = end_addr;
 }
 
-flash_status_t flash_write_data(flash_t *self, uint8_t *data, uint8_t len)
-{
-	if((self->current_address + (len * FLASH_HALFWORLD_OFFSET)) > FLASH_PAGE_END )
-	{
-		flash_status_t status = flash_erase_page(self);
-		if( status != FLASH_OK)
-			return status;
-	}
 
-
-	HAL_FLASH_Unlock();
-	for(uint8_t i = 0; i < len; ++i)
-	{
-		HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, self->current_address, data[i]);
-		self->current_address += FLASH_HALFWORLD_OFFSET;
-	}
-	HAL_FLASH_Lock();
-
-	return FLASH_OK;
-}
-
-flash_status_t flash_read_data(flash_t *self, uint8_t *data, uint8_t len)
-{
-	uint32_t start_read_address = (self->current_address - (len * FLASH_HALFWORLD_OFFSET));
-	if(start_read_address < FLASH_PAGE_START)
-		return FLASH_INVALID_LEN;
-
-	for(uint8_t i = 0; i < len; ++i)
-		data[i] = *(uint8_t*)(start_read_address + (i * 2) );
-
-	return FLASH_OK;
-}
-
-flash_status_t flash_erase_page(flash_t *self)
+flash_status_t _flash_erase_page(flash_t *self)
 {
 	FLASH_EraseInitTypeDef EraseInitStruct;
 	uint32_t pageError;

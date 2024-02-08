@@ -93,10 +93,15 @@ static void _runtime_device_init(runtime_controller_t *self)
 	relay_init(&self->relay, &relay_config);
 
 	/* Initialization display */
-	tm1638_init();
+	tm_1638_gpio_t tm_1638_gpio = {
+			.clk = {TM1638_CLK_GPIO_Port, TM1638_CLK_Pin},
+			.stb = {TM1638_STB_GPIO_Port, TM1638_STB_Pin},
+			.dio = {TM1638_DIO_GPIO_Port, TM1638_DIO_Pin},
+	};
+	tm1638_init(&tm_1638_gpio);
 	osDelay(1);
-	tm1638_set_clear_all();   // Clear device
-	tm1638_set_display(1, 3); // Turn on display and brightness
+	tm1638_clear();   // Clear device
+	tm1638_configuration(1, 3); // Turn on display and brightness
 	_runtime_change_led_status(self);
 }
 
@@ -249,20 +254,20 @@ static void _runtime_normal_set_display( runtime_controller_t *self )
 
 	/* Check and display boiler temperature */
 	if( self->ds18b_20_boiler->temperature < -80.f )
-		tm1638_set_display_string(0, "Err ", 4);
+		tm1638_display_string(0, "Err ", 4);
 	else
 	{
 		float_to_char(str_from_f, self->ds18b_20_boiler->temperature);
-		tm1638_set_display_string(0, str_from_f, 5);
+		tm1638_display_string(0, str_from_f, 5);
 	}
 
 	/* Check and display pipe temperature */
 	if( self->ds18b_20_pipe->temperature < -80.f )
-		tm1638_set_display_string(4, "Err ", 4);
+		tm1638_display_string(4, "Err ", 4);
 	else
 	{
 		float_to_char(str_from_f, self->ds18b_20_pipe->temperature);
-		tm1638_set_display_string(4, str_from_f, 5);
+		tm1638_display_string(4, str_from_f, 5);
 	}
 }
 
@@ -357,19 +362,19 @@ static void _runtime_change_is_extra_heating( runtime_controller_t *self, uint8_
 static void _runtime_change_led_status( runtime_controller_t *self )
 {
 	if(self->_is_boiler_heating){
-		tm1638_set_led(0, 1);
-		tm1638_set_led(2, 0);
+		tm1638_led(0, 1);
+		tm1638_led(2, 0);
 	}else {
-		tm1638_set_led(0, 0);
-		tm1638_set_led(2, 1);
+		tm1638_led(0, 0);
+		tm1638_led(2, 1);
 	}
 
 	if(self->_is_extra_heating){
-		tm1638_set_led(5, 1);
-		tm1638_set_led(7, 0);
+		tm1638_led(5, 1);
+		tm1638_led(7, 0);
 	}else {
-		tm1638_set_led(5, 0);
-		tm1638_set_led(7, 1);
+		tm1638_led(5, 0);
+		tm1638_led(7, 1);
 	}
 }
 
@@ -381,8 +386,8 @@ static void _runtime_normal_on_click( runtime_controller_t *self )
 	self->_menu_option = MENU_OPTION_BRT; // First menu option (0)
 
 	// Update display to menu mode
-	tm1638_set_display_clear();
-	tm1638_set_display_string(0, menu_config_get_menu_char(self->_menu_option), 3);
+	tm1638_display_clear();
+	tm1638_display_string(0, menu_config_get_menu_char(self->_menu_option), 3);
 }
 
 
@@ -394,11 +399,11 @@ static void _runtime_menu_on_click( runtime_controller_t *self)
 
 	// Update display to input
 	char buff[6];
-	tm1638_set_display_clear();
+	tm1638_display_clear();
 	self->_input_value = self->_configuration[self->_menu_option];
 	float_to_char(buff, self->_input_value);
-	tm1638_set_display_string(0, menu_config_get_menu_char(self->_menu_option), 3);
-	tm1638_set_display_string(4, buff, 5);
+	tm1638_display_string(0, menu_config_get_menu_char(self->_menu_option), 3);
+	tm1638_display_string(4, buff, 5);
 }
 
 static void _runtime_menu_on_move( runtime_controller_t *self )
@@ -408,8 +413,8 @@ static void _runtime_menu_on_move( runtime_controller_t *self )
 	self->_menu_option = max(0, min(MENU_N_OPTION-1, self->_menu_option + enc_move));
 	self->_last_action_tick = HAL_GetTick(); // Update last action time
 	// Update display()
-	tm1638_set_display_clear();
-	tm1638_set_display_string(0, menu_config_get_menu_char(self->_menu_option), 3);
+	tm1638_display_clear();
+	tm1638_display_string(0, menu_config_get_menu_char(self->_menu_option), 3);
 }
 
 static void _runtime_input_on_click( runtime_controller_t *self )
@@ -418,8 +423,8 @@ static void _runtime_input_on_click( runtime_controller_t *self )
 
 	self->mode = RUNTIME_MENU; // Change mode to menu
 
-	tm1638_set_display_clear();
-	tm1638_set_display_string(0, menu_config_get_menu_char(self->_menu_option), 3);
+	tm1638_display_clear();
+	tm1638_display_string(0, menu_config_get_menu_char(self->_menu_option), 3);
 
 
 	if(self->_input_value != self->_configuration[self->_menu_option])
@@ -444,7 +449,7 @@ static void _runtime_input_on_move( runtime_controller_t *self)
 	// Update display()
 	char buff[6];
 	float_to_char(buff, self->_input_value);
-	tm1638_set_display_string(4, buff, 5);
+	tm1638_display_string(4, buff, 5);
 }
 
 

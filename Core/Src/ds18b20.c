@@ -1,5 +1,7 @@
 #include "ds18b20.h"
 #include "one_wire.h"
+#include <stdlib.h>
+#include <string.h>
 
 
 /* --- Private variable definition --- */
@@ -90,6 +92,22 @@ void ds18b20_device_read_temperature(ds18b20_device_t* device)
 	ds18b20_status_t status = ds18b20_read_temperature(device->rom_code, &device->temperature);
 	device->status = status;
 
+}
+
+
+void ds18b20_device_init(ds18b20_device_t** device, uint8_t* rom_code)
+{
+	*device = calloc(1, sizeof(ds18b20_device_t));
+
+	(*device)->status = DS18B20_INIT;
+	(*device)->temperature = -85.f;
+	memcpy((*device)->rom_code, rom_code, sizeof(uint8_t)*8);
+}
+
+
+void ds18b20_device_deinit(ds18b20_device_t* device)
+{
+	free(device);
 }
 
 

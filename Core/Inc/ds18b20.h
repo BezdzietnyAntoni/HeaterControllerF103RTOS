@@ -78,4 +78,18 @@ ds18b20_status_t ds18b20_read_temperature(const uint8_t* rom_code, float *temp);
  */
 void ds18b20_device_read_temperature(ds18b20_device_t* device);
 
+/*
+ * Function allocate memory for ds18b20_device_t and set default value
+ * @param **device : Pointer to pointer where device will be stored
+ */
+void ds18b20_device_init(ds18b20_device_t** device, uint8_t* rom_code);
+
+/*
+ * Function free ds18b20_device_t memory
+ * @param *device : Pointer to devices
+ */
+void ds18b20_device_deinit(ds18b20_device_t* device);
+
+
+
 #endif /* INC_DS18B20_H_ */

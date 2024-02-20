@@ -30,6 +30,8 @@
 #include "relay.h"
 #include "flash.h"
 #include "one_wire.h"
+#include "controller.h"
+#include "controller_devices.h"
 
 /* USER CODE END Includes */
 
@@ -49,6 +51,8 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+IWDG_HandleTypeDef hiwdg;
+
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim3;
 
@@ -68,6 +72,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_TIM3_Init(void);
+static void MX_IWDG_Init(void);
 void start_runtime(void *argument);
 
 /* USER CODE BEGIN PFP */
@@ -95,7 +100,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  one_wire_init(OW_GPIO_Port, OW_Pin);
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -109,9 +114,12 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM1_Init();
   MX_TIM3_Init();
+  MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start(&htim1);
   HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
+
+
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -172,10 +180,11 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI|RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
@@ -197,6 +206,34 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief IWDG Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_IWDG_Init(void)
+{
+
+  /* USER CODE BEGIN IWDG_Init 0 */
+
+  /* USER CODE END IWDG_Init 0 */
+
+  /* USER CODE BEGIN IWDG_Init 1 */
+
+  /* USER CODE END IWDG_Init 1 */
+  hiwdg.Instance = IWDG;
+  hiwdg.Init.Prescaler = IWDG_PRESCALER_256;
+  hiwdg.Init.Reload = 4095;
+  if (HAL_IWDG_Init(&hiwdg) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN IWDG_Init 2 */
+
+  /* USER CODE END IWDG_Init 2 */
+
 }
 
 /**
@@ -375,6 +412,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	}
 }
 
+
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_start_runtime */
@@ -388,20 +426,14 @@ void start_runtime(void *argument)
 {
   /* USER CODE BEGIN 5 */
 
-	gpio_t encoder_sw = {
-			.GPIOx = ENC_SW_GPIO_Port,
-			.GPIO_Pin = ENC_SW_Pin,
-	};
-
-	encoder_init(&htim3, &encoder_sw);
-
-
-  runtime_controller_t *runtime_controller;
-  runtime_controller_init(&runtime_controller);
+	controller_t *controller;
+	controller_init(&controller);
 
   for(;;)
   {
-    runtime_controller_run(runtime_controller);
+	  controller_run(controller);
+	  HAL_IWDG_Refresh(&hiwdg);
+    //runtime_controller_run(runtime_controller);
   }
   /* USER CODE END 5 */
 }
@@ -436,6 +468,7 @@ void Error_Handler(void)
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
+  NVIC_SystemReset();
   while (1)
   {
   }

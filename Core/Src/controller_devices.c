@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include "main.h"
 
+/* --- Private function declaration --- */
+
 static void _controller_devices_ds18b20_init(controller_devices_t *self);
 static void _controller_devices_relay_init(controller_devices_t *self);
 static void _controller_devices_flash_init(controller_devices_t *self);
@@ -10,6 +12,9 @@ static void _controller_devices_tm1638_init( void );
 static void _controller_devices_one_wire_init( void );
 static void _controller_devices_encoder( void );
 
+
+
+/* --- Public function definition --- */
 
 void controller_devices_init(controller_devices_t **self)
 {
@@ -34,6 +39,9 @@ void controller_devices_deinit(controller_devices_t *self)
 	free(self);
 }
 
+
+
+/* --- Private function definition --- */
 
 static void _controller_devices_relay_init(controller_devices_t *self)
 {

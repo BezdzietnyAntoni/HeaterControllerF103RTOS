@@ -4,6 +4,17 @@
 #include <cmsis_os.h>
 #include <stdbool.h>
 
+/* --- Private variable (normal mode configuration) --- */
+
+#define TEMPERATURE_MEASURE_PERIOD 		1000
+#define MAX_N_ERROR						60
+#define BOILER_RELAY					0
+#define INSTANT_RELAY					1
+#define BOILER_LED						0
+#define INSTANT_LED						7
+
+/* --- Private function declaration --- */
+
 static void _controller_normal_measure_temperature(controller_normal_t *self);
 static bool _controller_normal_check_measure_correct(controller_normal_t *self);
 static void _controller_normal_display(controller_normal_t *self);
@@ -16,14 +27,8 @@ static void _controller_normal_set_boiler_led(controller_normal_t *self, bool st
 static void _controller_normal_set_instant_led(controller_normal_t *self, bool state);
 
 
-#define TEMPERATURE_MEASURE_PERIOD 		1000
-#define MAX_N_ERROR						60
-#define BOILER_RELAY					0
-#define INSTANT_RELAY					1
-#define BOILER_LED						0
-#define INSTANT_LED						7
 
-
+/* --- Public function definition --- */
 
 void controller_normal_init(controller_normal_t **self,
 							controller_devices_t *devices,
@@ -55,6 +60,9 @@ void controller_normal_run(controller_normal_t *self)
 		_controller_normal_check_relay(self);
 }
 
+
+
+/* --- Private function definition --- */
 
 static void _controller_normal_measure_temperature(controller_normal_t *self)
 {

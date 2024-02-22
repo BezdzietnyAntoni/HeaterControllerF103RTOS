@@ -22,14 +22,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "tm1638.h"
-#include "encoder.h"
-#include "runtime_controller.h"
-#include "utilities.h"
-#include "ds18b20.h"
-#include "relay.h"
-#include "flash.h"
-#include "one_wire.h"
 #include "controller.h"
 #include "controller_devices.h"
 

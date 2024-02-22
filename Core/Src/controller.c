@@ -4,9 +4,15 @@
 #include <stdbool.h>
 
 
+
+/* --- Private variable (configuration controller) --- */
+
 #define MAX_PERIOD_WITHOUT_ACTION 		10000
 
+
+
 /* --- Private function declaration --- */
+
 void _controller_on_click(controller_t *self);
 void _controller_change_mode_normal(controller_t *self);
 void _controller_change_mode_menu(controller_t *self);
@@ -19,7 +25,9 @@ void _controller_devices_init(controller_t *self);
 void _controller_configuration_init(controller_t *self);
 
 
+
 /* --- Public interface definition --- */
+
 void controller_init(controller_t **self)
 {
 	(*self) = calloc(1, sizeof(controller_t));

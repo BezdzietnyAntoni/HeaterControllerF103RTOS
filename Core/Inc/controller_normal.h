@@ -1,8 +1,10 @@
 /*
- * controller_normal.h
+ * This .h / .c files implements normal controller.
  *
- *  Created on: Feb 8, 2024
- *      Author: muntek
+ * This controller is depends if controller is in normal mode.
+ *
+ * @author : Antoni Bezdzietny
+ * @create : 08.02.2024
  */
 
 #ifndef INC_CONTROLLER_NORMAL_H_

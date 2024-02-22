@@ -1,9 +1,15 @@
 /*
- * controller_device.h
+ * This .h / .c files implements devices using by controllers.
  *
- *  Created on: Feb 8, 2024
- *      Author: muntek
+ * This structures and files configuration and store fields for
+ * devices communication.
+ *
+ * In .c file are stored all devices configuration.
+ *
+ * @author : Antoni Bezdzietny
+ * @create : 08.02.2024
  */
+
 
 #ifndef INC_CONTROLLER_DEVICES_H_
 #define INC_CONTROLLER_DEVICES_H_

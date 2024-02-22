@@ -1,8 +1,11 @@
 /*
- * Main project controller
+ * This .h / .c files implements main controller.
+ *
+ * It's a main controller manage main features and
+ * switching modes (normal /menu / input).
  *
  * @author : Antoni Bezdzietny
- * @create : 08.02.2024
+ * @create : 11.01.2024
  */
 
 #ifndef INC_CONTROLLER_H_

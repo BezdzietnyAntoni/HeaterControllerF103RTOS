@@ -6,8 +6,8 @@
 /* --- Private variable --- */
 
 #define FLASH_HALFWORLD_OFFSET 	2
-#define FLASH_PAGE_START 		0x0800FC00  //0x0801FC00
-#define FLASH_PAGE_END			0x0800FFFF  //0x0801FFFF
+#define FLASH_PAGE_START 		0x0801FC00
+#define FLASH_PAGE_END			0x0801FFFF
 
 /* --- Private function declaration --- */
 static flash_status_t _flash_erase_page(flash_t *self);

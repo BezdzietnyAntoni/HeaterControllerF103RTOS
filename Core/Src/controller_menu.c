@@ -2,9 +2,15 @@
 #include "cmsis_os.h"
 #include <stdlib.h>
 
+
+/* --- Private function declaration --- */
+
 static void _controller_menu_display(controller_menu_t *self);
 static void _controller_menu_on_encoder_move(controller_menu_t *self);
 
+
+
+/* --- Public function definition --- */
 
 void controller_menu_init(controller_menu_t **self,
 						  controller_devices_t *controller_devices,
@@ -29,7 +35,6 @@ void controller_menu_run(controller_menu_t *self)
 		_controller_menu_on_encoder_move(self);
 }
 
-
 void controller_menu_set(controller_menu_t *self, menu_option_t menu_option)
 {
 	self->menu_option = menu_option;
@@ -37,6 +42,19 @@ void controller_menu_set(controller_menu_t *self, menu_option_t menu_option)
 	_controller_menu_display(self);
 }
 
+void controller_menu_set_is_new_configuration(controller_menu_t *self, bool state)
+{
+	self->is_new_configuration = state;
+}
+
+bool controller_menu_get_is_new_configuration(controller_menu_t *self)
+{
+	return self->is_new_configuration;
+}
+
+
+
+/* --- Private function definition --- */
 
 static void _controller_menu_display(controller_menu_t *self)
 {
@@ -50,12 +68,4 @@ static void _controller_menu_on_encoder_move(controller_menu_t *self)
 	_controller_menu_display(self);
 }
 
-void controller_menu_set_is_new_configuration(controller_menu_t *self, bool state)
-{
-	self->is_new_configuration = state;
-}
 
-bool controller_menu_get_is_new_configuration(controller_menu_t *self)
-{
-	return self->is_new_configuration;
-}

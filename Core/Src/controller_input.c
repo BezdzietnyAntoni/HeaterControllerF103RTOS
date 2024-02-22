@@ -3,9 +3,14 @@
 #include "cmsis_os.h"
 #include <stdbool.h>
 
+/* --- Private function declaration --- */
 
 static void _controller_input_display(controller_input_t *self);
 static void _controller_input_on_encoder_move(controller_input_t *self);
+
+
+
+/* --- Public function definition --- */
 
 void controller_input_init(controller_input_t **self,
 						   controller_devices_t *controller_devices,
@@ -46,11 +51,14 @@ bool controller_input_update_input(controller_input_t *self)
 	return true;
 }
 
-
 float controller_input_get_input(controller_input_t *self)
 {
 	return self->input_value;
 }
+
+
+
+/* --- Private function definition --- */
 
 static void _controller_input_display(controller_input_t *self)
 {
